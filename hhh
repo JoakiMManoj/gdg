@@ -1,0 +1,22 @@
+import requests
+from bs4 import BeautifulSoup
+import lxml.etree as et  # Corrected ElementTree import
+
+url = "https://www.pararius.com/apartment-for-rent/amsterdam/5d964256/amstelveenseweg?_gl=1*ru4s9g*_up*MQ..*_ga*MTgyNjk"
+
+headers = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+}
+
+def get_dom(url):
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, 'lxml')
+
+    parser = et.HTMLParser()
+    dom = et.fromstring(str(soup), parser)  # Parse BeautifulSoup output into an XML/HTML tree
+
+    return dom
+
+# Example usage
+dom_tree = get_dom(url)
+print(et.tostring(dom_tree, pretty_print=True).decode()[:500])  # Print first 500 characters of parsed HTML
